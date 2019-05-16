@@ -20,7 +20,7 @@
 
 {{-- Page Title --}}
 @section('page-title')
-All Vaccinated Dog List
+Brgy. {{$brgy->name}} Dog List
 @endsection
 
 {{-- Bread Crumb --}}
@@ -43,28 +43,11 @@ All Vaccinated Dog List
 
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="book-name"><strong>Select Barangay:</strong></label>
-                            <select class="form-control brgy-select" name="owner" required onchange="this.options[this.selectedIndex].value && (window.location = this.options[this.selectedIndex].value);">
-                                    <option value="/site/vacc/0">See All</option>
-                                @foreach($brgys as $brgy)
-                                    <option value="/site/vacc/{{ $brgy->id }}">Brgy. {{ $brgy->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row">
-                <div class="col-sm-12">
                     <table id="datatable" class="table table-striped table-bordered">
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Brgy - Purok</th>
+                    <th>Purok</th>
                     <th>Owner's Name</th>
                     <th>Contact Number</th>
                     <th>Dogs's Name</th>
@@ -72,6 +55,8 @@ All Vaccinated Dog List
                     <th>Age</th>
                     <th>Gender</th>
                     <th>Color</th>
+                    <th>Vaccine Status</th>
+                    <th>Vaccinated By</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -80,12 +65,20 @@ All Vaccinated Dog List
                     @foreach($dogs as $dog)
                         <tr>
                             <td>{{ $x++ }}</td>
-                            <td>{{ $dog->brgy->name }} - {{ $dog->purok->name }}</td>
+                            <td>{{ $dog->purok->name }}</td>
                             <td>{{ $dog->owner->name }}</td>
                             <td>{{ $dog->owner->cp }}</td>
-                            <td><a onclick="showImage('{{$dog->img}}')" href="javascript:void(0)">{{ $dog->name }}</a></td>
+                            <td>
+                                <a onclick="showImage('{{$dog->img}}')" href="javascript:void(0)">
+                                    {{ $dog->name }}
+                                </a>
+
+                                @if($dog->lost_count > 0)
+                                    <br> (DOG LOST)
+                                @endif
+                            </td>
                             <td>{{ $dog->breed }}</td>
-                            <td>{{ $dog->age }}</td>
+                            <td>{{ Carbon\Carbon::parse($dog->age)->age }}</td>
                             <td>
                                 @if($dog->gender == 1)
                                     Male
@@ -95,6 +88,17 @@ All Vaccinated Dog List
                             </td>
                             <td>{{ $dog->color }}</td>
                             <td>
+                                @if($dog->status == 1)
+                                    Vaccinated
+                                @else
+                                    Not Vaccinated
+                                @endif
+                            </td>
+                            <td>{{ $dog->vaccinated_by }}</td>
+                            <td>
+                                @if($dog->lost_count == 0)
+                                <button onclick="markLost('{{ $dog->id }}')" class="btn btn-icon btn-xs waves-effect btn-primary m-b-5"> <i class="mdi mdi-magnify"></i> Mark as Lost</button>
+                                @endif
                                 <a href="/site/edit/{{ $dog->id }}" class="btn btn-icon btn-xs waves-effect btn-warning m-b-5"> <i class="fa fa-pencil"></i> Edit</a>
                                 <button onclick="deleteDog('{{ $dog->id }}')" class="btn btn-icon btn-xs waves-effect btn-danger m-b-5"> <i class="fa fa-trash-o"></i> Delete</button>
                             </td>
@@ -123,7 +127,7 @@ All Vaccinated Dog List
 					            <label for="book-name"><strong>Owner's Name:</strong></label>
 					            <select class="form-control owner-select" name="owner" required>
                                     @foreach($owners as $owner)
-                                        <option value="{{ $owner->id }}">{{ $owner->name }} - Brgy. {{ $owner->brgy->name }}</option>
+                                        <option value="{{ $owner->id }}">{{ $owner->name }}</option>
                                     @endforeach
                                 </select>
 					        </div>
@@ -142,8 +146,8 @@ All Vaccinated Dog List
 
 						<div class="form-row">
 					        <div class="form-group col-md-6">
-					            <label for="book-name"><strong>Age:</strong></label>
-					            <input type="number" class="form-control" id="book-name" placeholder="Age" name="age" required>
+					            <label for="book-name"><strong>Birthday:</strong></label>
+					            <input type="date" class="form-control" id="book-name" placeholder="Age" name="age" required>
 					        </div>
 					        <div class="form-group col-md-6">
 					            <label for="book-author"><strong>Gender:</strong></label>
@@ -174,6 +178,13 @@ All Vaccinated Dog List
                                 <label for="book-name"><strong>Image</strong></label>
                                 <input type="hidden" id="crop-image" value="" name="image">
                                 <input type="file" name="upload_image" id="upload_image" accept="image/*" data-buttonbefore="true" class="filestyle">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="book-name"><strong>Vaccinated By:</strong></label>
+                                <input type="text" class="form-control" id="book-name" placeholder="Vaccinator Name" name="vaccby">
                             </div>
                         </div>
 
@@ -231,6 +242,41 @@ All Vaccinated Dog List
       </div>
     </div>
   </div>
+
+
+  <!-- Modal LOST DATE -->
+<div id="modal-lost-date" class="modal" role="dialog">
+ <div class="modal-dialog">
+  <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Dog Lost</h4>
+        </div>
+        <form method="POST" action="/lost-and-found">
+        <div class="modal-body">
+          <div class="row">
+              <div class="col-lg-12">
+                  
+                    @csrf
+                    <input type="hidden" id="dog_lost_id" name="dog_lost_id" value="">
+                      <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="book-name"><strong>Date Lost:</strong></label>
+                                <input type="date" name="lost" class="form-control" required>
+                            </div>
+                        </div>
+          
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        </div>
+     </div>
+    </div>
+</div><!-- /.modal -->
 @endsection
 
 
@@ -295,6 +341,11 @@ $(document).ready(function () {
 function showImage(src){
   $("#dog-img").attr("src", '{{ asset('img/dogs') }}/'+src);
   $("#modal-dog-image").modal('show');
+}
+
+function markLost(id){
+    $("#dog_lost_id").val(id);
+    $("#modal-lost-date").modal('show');
 }
 
 function deleteDog(id)

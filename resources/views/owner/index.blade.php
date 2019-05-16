@@ -56,7 +56,7 @@ Owner
                 	<tr>
                 		<td>{{ $x++ }}</td>
                 		<td>{{ $owner->name }}</td>
-                		<td>{{ $owner->brgy->name }} - {{ $owner->purok->name }}</td>
+                		<td>Brgy. {{ $owner->brgy->name }} - {{ $owner->purok->name }}</td>
                 		<td>{{ $owner->cp }}</td>
                 		<td>{{ $owner->dog->count() }}</td>
                 		<td>

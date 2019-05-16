@@ -18,7 +18,7 @@
 
 {{-- Page Title --}}
 @section('page-title')
-Welcome to Vaccination Monitoring of Baler
+Welcome to VACCINATION MONITORING OF MUNICIPAL AGRICULTURE OFFICE OF BALER
 @endsection
 
 {{-- Bread Crumb --}}

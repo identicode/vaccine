@@ -50,6 +50,27 @@ class SiteController extends Controller
     	
     }
 
+    public function brgy($id)
+    {
+        $puroks = Purok::where('brgy_id', $id)->get();
+        $brgy = Brgy::with('purok')->where('id', $id)->get()->first();
+        $dogs = Dog::with('purok', 'brgy')
+                    ->withCount(['lost' => function($query){
+                        $query->where('date_found', null);
+                    }])
+                    ->where('brgy_id', $id)
+                    ->get();
+        $owners = Owner::with('purok', 'brgy')->where('brgy_id', $id)->get();
+        $brgys = Brgy::all();
+        return view('site.brgy')
+                ->with('bid', $id)
+                ->with('dogs', $dogs)
+                ->with('brgys', $brgys)
+                ->with('owners', $owners)
+                ->with('puroks', $puroks)
+                ->with('brgy', $brgy);
+    }
+
     public function non($id)
     {
         if($id == 0){
@@ -104,7 +125,8 @@ class SiteController extends Controller
     		'breed' => $request->breed,
     		'age' => $request->age,
     		'gender' => $request->gender,
-    		'status' => $request->status,
+            'status' => $request->status,
+    		'vaccinated_by' => $request->vaccby,
             'owner_id' => $owner->id,
             'purok_id' => $owner->purok_id,
             'brgy_id' => $owner->brgy_id,
@@ -159,17 +181,14 @@ class SiteController extends Controller
         $dog->breed = $request->breed;
         $dog->age = $request->age;
         $dog->color = $request->color;
+        $dog->vaccinated_by = $request->vaccby;
         $dog->status = $request->status;
         $dog->owner_id = $owner->id;
         $dog->purok_id = $owner->purok_id;
         $dog->brgy_id = $owner->brgy_id;
         $dog->save();
 
-        if($request->status == 1){
-            return redirect('/site/vacc/0')->with('success', 'Dog profile has been updated.');
-        }else{
-            return redirect('/site/nvacc/0')->with('success', 'Dog profile has been updated.');
-        }
-
+        return redirect('/site/brgy/'.$dog->brgy_id)->with('success', 'Dog profile has been updated.');
+        
     }
 }

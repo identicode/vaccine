@@ -11,7 +11,8 @@ class Dog extends Model
     	'breed',
     	'age',
     	'gender',
-    	'status',
+        'status',
+    	'vaccinated_by',
     	'owner_id',
         'purok_id',
     	'brgy_id',
@@ -32,6 +33,11 @@ class Dog extends Model
     public function owner()
     {
         return $this->belongsTo('App\Owner', 'owner_id');
+    }
+
+    public function lost()
+    {
+        return $this->hasMany('App\Laf', 'dog_id');
     }
     
 }

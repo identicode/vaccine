@@ -15,12 +15,10 @@ class CreateLafsTable extends Migration
     {
         Schema::create('lafs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('owner');
-            $table->string('cp');
-            $table->string('dog');
-            $table->string('breed');
-            $table->string('lost');
-            $table->string('image');
+            $table->integer('dog_id');
+            $table->string('date_lost');
+            $table->string('date_report');
+            $table->string('date_found')->nullable();
             $table->timestamps();
         });
     }

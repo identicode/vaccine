@@ -87,9 +87,9 @@ Vaccinated Dogs in Brgy. {{ $brgy->name }}
                             <td>{{ $dog->purok->name }}</td>
                             <td>{{ $dog->owner->name }}</td>
                             <td>{{ $dog->owner->cp }}</td>
-                            <td>{{ $dog->name }}</td>
+                            <td><a onclick="showImage('{{$dog->img}}')" href="javascript:void(0)">{{ $dog->name }}</a></td>
                             <td>{{ $dog->breed }}</td>
-                            <td>{{ $dog->age }}</td>
+                            <td>{{ Carbon\Carbon::parse($dog->age)->age }}</td>
                             <td>
                                 @if($dog->gender == 1)
                                     Male
@@ -147,8 +147,8 @@ Vaccinated Dogs in Brgy. {{ $brgy->name }}
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="book-name"><strong>Age:</strong></label>
-                                <input type="number" class="form-control" id="book-name" placeholder="Age" name="age" required>
+                                <label for="book-name"><strong>Birthday:</strong></label>
+                                <input type="date" class="form-control" id="book-name" placeholder="Birthday" name="age" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="book-author"><strong>Gender:</strong></label>

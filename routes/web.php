@@ -34,8 +34,10 @@ Route::prefix('home')->group(function(){
 
 Route::prefix('site')->group(function(){
 
-	Route::get('/vacc/{id}', 'SiteController@index');
-	Route::get('/nvacc/{id}', 'SiteController@non');
+	// Route::get('/vacc/{id}', 'SiteController@index');
+	// Route::get('/nvacc/{id}', 'SiteController@non');
+
+	Route::get('/brgy/{id}', 'SiteController@brgy');
 
 	Route::post('/', 'SiteController@store');
 	Route::get('/delete/{id}', 'SiteController@destroy');
@@ -46,15 +48,22 @@ Route::prefix('site')->group(function(){
 
 Route::prefix('settings')->group(function(){
 
-	Route::get('/brgy', 'BrgyController@index');
-	Route::post('/brgy', 'BrgyController@store');
-	Route::put('/brgy', 'BrgyController@update');
-	Route::get('/brgy/delete/{id}', 'BrgyController@destroy');
+	// Route::get('/brgy', 'BrgyController@index');
+	// Route::post('/brgy', 'BrgyController@store');
+	// Route::put('/brgy', 'BrgyController@update');
+	// Route::get('/brgy/delete/{id}', 'BrgyController@destroy');
 
-	Route::get('/purok', 'PurokController@index');
-	Route::post('/purok', 'PurokController@store');
-	Route::put('/purok', 'PurokController@update');
-	Route::get('/purok/delete/{id}', 'PurokController@destroy');
+	// Route::get('/purok', 'PurokController@index');
+	// Route::post('/purok', 'PurokController@store');
+	// Route::put('/purok', 'PurokController@update');
+	// Route::get('/purok/delete/{id}', 'PurokController@destroy');
+
+	Route::prefix('account')->group(function(){
+		Route::get('/', 'ProfileController@index');
+		Route::post('/profile', 'ProfileController@profile');
+		Route::post('/username', 'ProfileController@username');
+		Route::post('/password', 'ProfileController@password');
+	});
 
 });
 
@@ -74,7 +83,14 @@ Route::prefix('owner')->group(function(){
 	Route::post('/update', 'OwnerController@update');
 });
 
-Route::get('/lost-and-found', 'LostFoundController@index');
-Route::post('/lost-and-found', 'LostFoundController@store');
+Route::prefix('lost-and-found')->group(function(){
+
+	Route::get('/', 'LostFoundController@index');
+	Route::get('/{id}', 'LostFoundController@found');
+	Route::post('/', 'LostFoundController@store');
+
+});
+
+
 
 

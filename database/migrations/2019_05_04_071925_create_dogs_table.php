@@ -21,6 +21,7 @@ class CreateDogsTable extends Migration
             $table->integer('gender');
             $table->integer('status');
             $table->string('color');
+            $table->string('vaccinated_by')->nullable();
             $table->integer('owner_id');
             $table->integer('purok_id');
             $table->integer('brgy_id');

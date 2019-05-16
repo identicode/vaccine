@@ -70,8 +70,8 @@ Edit Dog Profile
 
 						<div class="form-row">
 					        <div class="form-group col-md-6">
-					            <label for="book-name"><strong>Age:</strong></label>
-					            <input type="number" class="form-control" id="book-name" placeholder="Age" name="age" value="{{ $dog->age }}" required>
+					            <label for="book-name"><strong>Birthday:</strong></label>
+					            <input type="date" class="form-control" id="book-name" placeholder="Age" name="age" value="{{ $dog->age }}" required>
 					        </div>
 					        <div class="form-group col-md-6">
 					            <label for="book-author"><strong>Gender:</strong></label>
@@ -103,6 +103,13 @@ Edit Dog Profile
                                 <label for="book-name"><strong>Image</strong></label>
                                 <input type="hidden" id="crop-image" value="" name="image">
                                 <input type="file" name="upload_image" id="upload_image" accept="image/*" data-buttonbefore="true" class="filestyle">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="book-name"><strong>Vaccinated By:</strong></label>
+                                <input type="text" class="form-control" id="book-name" value="{{$dog->vaccinated_by}}" placeholder="Vaccinator Name" name="vaccby">
                             </div>
                         </div>
 

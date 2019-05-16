@@ -16,34 +16,30 @@ class LostFoundController extends Controller
     public function index()
     {
         $lafs = Laf::all();
-    	return view('laf.index')->with('lafs', $lafs);
+        $count['lost'] = Laf::where('date_found', null)->distinct('dog_id')->get()->count();
+        $count['found'] = Laf::where('date_found', '!=', null)->distinct('dog_id')->get()->count();
+    	return view('laf.index')
+                ->with('lafs', $lafs)
+                ->with('count', $count);
     }
 
     public function store(Request $request)
     {
-    	
-
-
-        //Image Decoding
-        $image = $request->image;
-        $image = str_replace('data:image/jpeg;base64,', '', $image);
-        $image = str_replace(' ', '+', $image);
-        $imageName = time().mt_rand().".jpg";
-        $destination = public_path()."/img/losts/".$imageName;
-        $actualImage = base64_decode($image);
-        $move = file_put_contents($destination, $actualImage);
-
-
-
     	Laf::create([
-    		'owner' => $request->owner,
-    		'cp' => $request->cp,
-    		'dog' => $request->dog,
-    		'breed' => $request->breed,
-    		'lost' => $request->lost,
-    		'image' => $imageName
-    	]);
+            'dog_id' => $request->dog_lost_id,
+            'date_lost' => $request->lost,
+            'date_report' => date('Y-m-d', time())
+        ]);
 
-    	return redirect()->back()->with('success', 'Lost profile has been added.');
+        return redirect('/lost-and-found')->with('success', 'Dog has been marked as lost');
+    }
+
+    public function found($id)
+    {
+        $update = Laf::find($id);
+        $update->date_found = date('Y-m-d', time());
+        $update->save();
+
+        return redirect()->back()->with('success', 'Report has been marked as found.');
     }
 }

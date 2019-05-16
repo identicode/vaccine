@@ -45,7 +45,7 @@
                                     <h2 class="text-uppercase" style="color:white;">
                                         LOGIN
                                     </h2>
-                                    <h4 class="text-uppercase font-bold m-b-0" style="color:white;">VACCINATION MONITORING OF BALER</h4>
+                                    <h4 class="text-uppercase font-bold m-b-0" style="color:white;">VACCINATION MONITORING OF MUNICIPAL AGRICULTURE OFFICE OF BALER</h4>
                                 </div>
                                 <div class="account-content">
                                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">

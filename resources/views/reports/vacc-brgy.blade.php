@@ -40,7 +40,7 @@ Reports
                                     <div class="panel-body">
                                         <div class="clearfix">
                                             <div class="pull-center">
-                                                <h3 align="center">LIST OF NON VACCINATED DOGS</h3>
+                                                <h3 align="center">LIST OF VACCINATED DOGS</h3>
                                                 <h4 align="center">BRGY. {{ strtoupper($brgyI->name) }}</h5>
                                             </div>
                                         </div>

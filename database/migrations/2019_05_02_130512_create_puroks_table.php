@@ -24,12 +24,25 @@ class CreatePuroksTable extends Migration
 
         for ($a=1; $a < 14; $a++) { 
 
-            for ($b=1; $b < 8; $b++) { 
-               Purok::create([
-                    'name' => 'Purok '.$b,
-                    'brgy_id' => $a
-               ]);
+            if($a <= 5){
+
+                Purok::create([
+                            'name' => '(Poblacion)',
+                            'brgy_id' => $a
+                       ]);
+
+            }else{
+
+                for ($b=1; $b < 8; $b++) { 
+                       Purok::create([
+                            'name' => 'Purok '.$b,
+                            'brgy_id' => $a
+                       ]);
+                }
+
             }
+
+            
            
         }
 

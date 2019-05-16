@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
         });
 
         User::create([
-            'name' => 'Ricardo Dalisay',
+            'name' => 'Ricardo___Dalisay___A',
             'username' => 'admin',
             'password' => Hash::make('admin')
         ]);

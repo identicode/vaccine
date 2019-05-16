@@ -59,7 +59,7 @@
                     <div class="logo">
                         
                         <a href="/home/welcome" class="logo">
-                            VACCINATION MONITORING OF BALER
+                            VACCINATION MONITORING OF MUNICIPAL AGRICULTURE OFFICE OF BALER
                         </a>
                         
 
@@ -116,8 +116,12 @@
                             <li class="has-submenu">
                                 <a href="javascript:void(0)"><i class="mdi mdi-map-marker"></i> Site</a>
                                 <ul class="submenu">
-                                    <li><a href="/site/vacc/0">Vaccinated</a></li>
-                                    <li><a href="/site/nvacc/0">Non Vaccinated</a></li>
+                                    <!-- <li><a href="/site/vacc/0">Vaccinated</a></li> -->
+                                    <!-- <li><a href="/site/nvacc/0">Non Vaccinated</a></li> -->
+                                    @php($brgysMmm = App\Brgy::all())
+                                    @foreach($brgysMmm as $brgysMmmm)
+                                    <li><a href="/site/brgy/{{$brgysMmmm->id}}">Brgy. {{$brgysMmmm->name}}</a></li>
+                                    @endforeach
                                 </ul>
                             </li>
 
@@ -150,8 +154,8 @@
                                 <a href="javascript:void(0)"><i class="mdi mdi-settings"></i> Settings</a>
                                 <ul class="submenu">
                                     <li><a href="/settings/account">Account</a></li>
-                                    <li><a href="/settings/brgy">Baranggay</a></li>
-                                    <li><a href="/settings/purok">Purok</a></li>
+                                    <!-- <li><a href="/settings/brgy">Baranggay</a></li> -->
+                                    <!-- <li><a href="/settings/purok">Purok</a></li> -->
                                 </ul>
                             </li>
 

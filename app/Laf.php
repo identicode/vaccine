@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Laf extends Model
 {
     protected $fillable = [
-    	'owner',
-    	'cp',
-    	'dog',
-    	'breed',
-    	'lost',
-    	'image'
+    	'dog_id',
+    	'date_lost',
+    	'date_report',
+    	'date_found'
     ];
+
+    public function dog()
+    {
+    	return $this->belongsTo('App\Dog', 'dog_id');
+    }
 }
